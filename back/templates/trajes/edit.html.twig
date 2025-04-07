@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Trajes{% endblock %}
+
+{% block body %}
+    <h1>Edit Trajes</h1>
+
+    {{ include('trajes/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_trajes_index') }}">back to list</a>
+
+    {{ include('trajes/_delete_form.html.twig') }}
+{% endblock %}

@@ -24,7 +24,7 @@ class Trajes
     private ?string $estado = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $dueñoOriginal = null;
+    private ?string $duenoOriginal = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaIncorporacion = null;
@@ -86,14 +86,14 @@ class Trajes
     }
 
 
-    public function getDueñoOriginal(): ?string
+    public function getDuenoOriginal(): ?string
     {
-        return $this->dueñoOriginal;
+        return $this->duenoOriginal;
     }
 
-    public function setDueñoOriginal(string $dueñoOriginal): static
+    public function setDuenoOriginal(string $duenoOriginal): static
     {
-        $this->dueñoOriginal = $dueñoOriginal;
+        $this->duenoOriginal = $duenoOriginal;
 
         return $this;
     }

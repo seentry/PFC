@@ -31,7 +31,7 @@ class Usuarios
 
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $añoInscripcion = null;
+    private ?\DateTimeInterface $anoInscripcion = null;
 
     public function getId(): ?int
     {
@@ -87,14 +87,14 @@ class Usuarios
     }
 
 
-    public function getAñoInscripcion(): ?\DateTimeInterface
+    public function getAnoInscripcion(): ?\DateTimeInterface
     {
-        return $this->añoInscripcion;
+        return $this->anoInscripcion;
     }
 
-    public function setAñoInscripcion(\DateTimeInterface $añoInscripcion): static
+    public function setAnoInscripcion(\DateTimeInterface $anoInscripcion): static
     {
-        $this->añoInscripcion = $añoInscripcion;
+        $this->anoInscripcion = $anoInscripcion;
 
         return $this;
     }
