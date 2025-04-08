@@ -1,9 +1,44 @@
-<!-- HEADER -->
-<div class="header">
-    <a href="inicio" class="question-link">Inicio</a>
-    <a href="reservas" class="question-link">Reservas</a>
-    <a href="contactame" class="question-link">Contactame</a>
-
-    <a href="perfil" class="question-link">Perfil</a>
-
-</div>
+<div class="container-fluid bg-dark" style="width: 100vw; box-shadow: 0 2px 4px rgba(0,0,0,0.3); height: 100px;">
+    <div class="d-flex justify-content-between align-items-center px-3 py-2">
+      <a href="inicio" class="d-flex align-items-center">
+        <img alt="Logo" src="/img/logo.png" style="width: 90px; height: auto;">
+      </a>
+  
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
+                aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1"
+             id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+              <a href="inicio">
+                <img src="/img/logo.png" alt="Logo" style="width: 150px; height: auto;">
+              </a>
+            </h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link text-white" href="inicio">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="reservas">Reservas</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="contactame">Contactame</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="perfil">Perfil</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+  
