@@ -1,0 +1,26 @@
+.lead {
+    display: inline-block;
+    font-family: monospace;
+    white-space: nowrap;
+    border-right: 4px solid;
+    width: 36ch;
+    overflow: hidden;
+    
+    animation: typing 3s steps(37, end) forwards, blink .6s infinite step-end alternate;
+  }
+  
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 36ch;
+    }
+  }
+  
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
