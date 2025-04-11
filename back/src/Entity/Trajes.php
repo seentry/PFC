@@ -91,10 +91,9 @@ class Trajes
         return $this->duenoOriginal;
     }
 
-    public function setDuenoOriginal(string $duenoOriginal): static
+    public function setDuenoOriginal(Padres $duenoOriginal): static
     {
         $this->duenoOriginal = $duenoOriginal;
-
         return $this;
     }
 

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Usuarios;
-use App\Form\Usuarios1Type;
+use App\Form\UsuariosType;
 use App\Repository\UsuariosRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +26,7 @@ final class UsuariosController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $usuario = new Usuarios();
-        $form = $this->createForm(Usuarios1Type::class, $usuario);
+        $form = $this->createForm(UsuariosType::class, $usuario);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +53,7 @@ final class UsuariosController extends AbstractController
     #[Route('/{id}/edit', name: 'app_usuarios_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Usuarios $usuario, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(Usuarios1Type::class, $usuario);
+        $form = $this->createForm(UsuariosType::class, $usuario);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
