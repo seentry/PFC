@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/trajes')]
+#[Route('/api/trajes')]
 final class TrajesController extends AbstractController
 {
     #[Route(name: 'app_trajes_index', methods: ['GET'])]

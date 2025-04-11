@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/padres')]
+#[Route('/api/padres')]
 final class PadresController extends AbstractController
 {
     #[Route(name: 'app_padres_index', methods: ['GET'])]
