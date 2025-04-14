@@ -143,6 +143,9 @@
       <path value="$PROJECT_DIR$/back/vendor/doctrine/lexer" />
       <path value="$PROJECT_DIR$/back/vendor/doctrine/inflector" />
       <path value="$PROJECT_DIR$/back/vendor/doctrine/doctrine-migrations-bundle" />
+      <path value="$PROJECT_DIR$/back/vendor/api-platform/core" />
+      <path value="$PROJECT_DIR$/back/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/back/vendor/willdurand/negotiation" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />

@@ -22,7 +22,7 @@ final class PadresController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_padres_new', methods: ['GET', 'POST'])]
+    #[Route('/api/new', name: 'app_padres_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $padre = new Padres();
@@ -42,7 +42,7 @@ final class PadresController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_padres_show', methods: ['GET'])]
+    #[Route('/api/{id}', name: 'app_padres_show', methods: ['GET'])]
     public function show(Padres $padre): Response
     {
         return $this->render('padres/show.html.twig', [
@@ -50,7 +50,7 @@ final class PadresController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_padres_edit', methods: ['GET', 'POST'])]
+    #[Route('/api/{id}/edit', name: 'app_padres_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Padres $padre, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PadresType::class, $padre);
@@ -68,7 +68,7 @@ final class PadresController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_padres_delete', methods: ['POST'])]
+    #[Route('/api/{id}', name: 'app_padres_delete', methods: ['POST'])]
     public function delete(Request $request, Padres $padre, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$padre->getId(), $request->getPayload()->getString('_token'))) {

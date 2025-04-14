@@ -22,7 +22,7 @@ final class TrajesController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_trajes_new', methods: ['GET', 'POST'])]
+    #[Route('/api/new', name: 'app_trajes_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $traje = new Trajes();
@@ -42,7 +42,7 @@ final class TrajesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_trajes_show', methods: ['GET'])]
+    #[Route('/api/{id}', name: 'app_trajes_show', methods: ['GET'])]
     public function show(Trajes $traje): Response
     {
         return $this->render('trajes/show.html.twig', [
@@ -50,7 +50,7 @@ final class TrajesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_trajes_edit', methods: ['GET', 'POST'])]
+    #[Route('/api/{id}/edit', name: 'app_trajes_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Trajes $traje, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(TrajesType::class, $traje);
@@ -68,7 +68,7 @@ final class TrajesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_trajes_delete', methods: ['POST'])]
+    #[Route('/api/{id}', name: 'app_trajes_delete', methods: ['POST'])]
     public function delete(Request $request, Trajes $traje, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$traje->getId(), $request->getPayload()->getString('_token'))) {

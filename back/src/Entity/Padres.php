@@ -8,8 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Usuarios;
+use ApiPlatform\Metadata\ApiResource;
+
 
 #[ORM\Entity(repositoryClass: PadresRepository::class)]
+#[ApiResource]
 class Padres
 {
 

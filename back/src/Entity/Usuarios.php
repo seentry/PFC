@@ -6,9 +6,12 @@ use App\Repository\UsuariosRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Padres;
+use ApiPlatform\Metadata\ApiResource;
+
 
 
 #[ORM\Entity(repositoryClass: UsuariosRepository::class)]
+#[ApiResource]
 class Usuarios
 {
     #[ORM\Id]

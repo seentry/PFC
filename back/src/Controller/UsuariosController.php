@@ -22,7 +22,7 @@ final class UsuariosController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_usuarios_new', methods: ['GET', 'POST'])]
+    #[Route('/api/new', name: 'app_usuarios_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $usuario = new Usuarios();
@@ -42,7 +42,7 @@ final class UsuariosController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_usuarios_show', methods: ['GET'])]
+    #[Route('/api/{id}', name: 'app_usuarios_show', methods: ['GET'])]
     public function show(Usuarios $usuario): Response
     {
         return $this->render('usuarios/show.html.twig', [
@@ -50,7 +50,7 @@ final class UsuariosController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_usuarios_edit', methods: ['GET', 'POST'])]
+    #[Route('/api/{id}/edit', name: 'app_usuarios_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Usuarios $usuario, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UsuariosType::class, $usuario);
@@ -68,7 +68,7 @@ final class UsuariosController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_usuarios_delete', methods: ['POST'])]
+    #[Route('/api/{id}', name: 'app_usuarios_delete', methods: ['POST'])]
     public function delete(Request $request, Usuarios $usuario, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$usuario->getId(), $request->getPayload()->getString('_token'))) {

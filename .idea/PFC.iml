@@ -135,6 +135,9 @@
       <excludeFolder url="file://$MODULE_DIR$/back/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/back/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/back/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/api-platform/core" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/nelmio/cors-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/willdurand/negotiation" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
