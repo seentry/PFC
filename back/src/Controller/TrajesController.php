@@ -14,13 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/trajes')]
 final class TrajesController extends AbstractController
 {
-    #[Route(name: 'app_trajes_index', methods: ['GET'])]
-    public function index(TrajesRepository $trajesRepository): Response
+    #[Route('/api/trajes', name: 'api_trajes_index', methods: ['GET'])]
+    public function listTrajes(TrajesRepository $repo): Response
     {
-        return $this->render('trajes/index.html.twig', [
-            'trajes' => $trajesRepository->findAll(),
-        ]);
+        $trajes = $repo->findAll();
+        return $this->json($trajes);
     }
+
 
     #[Route('/api/new', name: 'app_trajes_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

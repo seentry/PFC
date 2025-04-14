@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { 
-  Usuario, 
-  Traje, 
-  Padre 
+import { map } from 'rxjs/operators';
+import { Usuario, Traje, Padre 
 } from '../models/response.interface';
 
 @Injectable({
@@ -32,7 +30,9 @@ export class RequestService {
 
   // -------------------- TRAJES --------------------
   public getTrajes(url: string): Observable<Traje[]> {
-    return this.http.get<Traje[]>(url, { headers: this.headers });
+    return this.http.get<any>(url, { headers: this.headers }).pipe(
+      map(response => response['hydra:member'] as Traje[])
+    );
   }
 
   public postTraje(url: string, traje: Traje): Observable<Traje> {

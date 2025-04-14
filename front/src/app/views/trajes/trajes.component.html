@@ -37,14 +37,15 @@
               <option value="mal">Mal</option>
             </select>
           </div>
-
           <div class="mb-3">
             <label class="form-label">Dueño Original</label>
             <select class="form-select" formControlName="duenoOriginal" required>
               <option value="">Seleccionar Dueño</option>
-              <option *ngFor="let padre of padres" [ngValue]="padre">
-                {{ padre.nombre }} {{ padre.apellidos }}
-              </option>
+              @for (padre of padres; track padre) {
+                <option [ngValue]="padre">
+                  {{ padre.nombre }} {{ padre.apellidos }}
+                </option>
+              }
             </select>
           </div>
           <div class="mb-3">
