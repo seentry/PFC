@@ -24,7 +24,14 @@
                 <td>{{ traje.tipo }}</td>
                 <td>{{ traje.talla }}</td>
                 <td>{{ traje.estado }}</td>
-                <td>{{ traje.duenoOriginal }}</td>
+                <td>
+                    {% if traje.duenoOriginal is not null and traje.duenoOriginal.id and traje.duenoOriginal.id > 0 %}
+                        {{ traje.duenoOriginal.nombre }} {{ traje.duenoOriginal.apellidos }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
                 <td>{{ traje.fechaIncorporacion ? traje.fechaIncorporacion|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_trajes_show', {'id': traje.id}) }}">show</a>

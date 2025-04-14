@@ -25,7 +25,14 @@
             </tr>
             <tr>
                 <th>DuenoOriginal</th>
-                <td>{{ traje.duenoOriginal }}</td>
+                <td>
+                    {% if traje.duenoOriginal is not null and traje.duenoOriginal.id and traje.duenoOriginal.id > 0 %}
+                        {{ traje.duenoOriginal.nombre }} {{ traje.duenoOriginal.apellidos }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
             </tr>
             <tr>
                 <th>FechaIncorporacion</th>

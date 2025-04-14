@@ -12,6 +12,12 @@ use App\Entity\Usuarios;
 #[ORM\Entity(repositoryClass: PadresRepository::class)]
 class Padres
 {
+
+    public function __toString(): string
+    {
+        return $this->nombre . ' ' . $this->apellidos;
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

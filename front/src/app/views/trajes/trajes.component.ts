@@ -70,25 +70,25 @@ export class TrajesComponent {
     this.trajesPaginados = this.trajes.slice(startIndex, endIndex);
   }
 
-  nextPage(): void {
+  public nextPage(): void {
     if (this.currentPage < this.totalPages()) {
       this.currentPage++;
       this.actualizarPaginacion();
     }
   }
 
-  prevPage(): void {
+  public prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.actualizarPaginacion();
     }
   }
 
-  totalPages(): number {
+  public totalPages(): number {
     return Math.ceil(this.trajes.length / this.itemsPerPage);
   }
 
-  eliminarTraje(id: number): void {
+  public eliminarTraje(id: number): void {
     if (id === undefined) return;
     const deleteUrl = `${this.apiUrlTrajes}/${id}`;
     this.service.deleteTraje(deleteUrl).subscribe({
@@ -103,16 +103,16 @@ export class TrajesComponent {
     });
   }
 
-  abrirFormulario(): void {
+  public abrirFormulario(): void {
     this.mostrarFormulario = true;
   }
 
-  cerrarFormulario(): void {
+  public cerrarFormulario(): void {
     this.trajeForm.reset();
     this.mostrarFormulario = false;
   }
 
-  agregarTraje(): void {
+  public agregarTraje(): void {
     if (this.trajeForm.invalid) {
       return;
     }

@@ -23,8 +23,9 @@ class Trajes
     #[ORM\Column(length: 255)]
     private ?string $estado = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $duenoOriginal = null;
+    #[ORM\ManyToOne(targetEntity: Padres::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Padres $duenoOriginal = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaIncorporacion = null;
@@ -86,7 +87,7 @@ class Trajes
     }
 
 
-    public function getDuenoOriginal(): ?string
+    public function getDuenoOriginal(): ?Padres
     {
         return $this->duenoOriginal;
     }
