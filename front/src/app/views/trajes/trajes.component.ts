@@ -18,7 +18,7 @@ export class TrajesComponent {
   public trajesPaginados: Traje[] = [];
   public currentPage: number = 1;
   public itemsPerPage: number = 6;
-  public apiUrlBase: string = 'https://127.0.0.1:8000/api';
+  public apiUrlBase: string = 'http://127.0.0.1:8000/api';
   public apiUrlTrajes: string = `${this.apiUrlBase}/trajes`;
   public apiUrlPadres: string = `${this.apiUrlBase}/padres`;
   public mostrarFormulario: boolean = false;
