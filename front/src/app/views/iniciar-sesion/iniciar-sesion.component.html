@@ -1,0 +1,32 @@
+<div class="container-fluid py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-5">
+      <h2 class="text-center mb-4">Llauradors</h2>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="reactiveForm" action="" class="w-70">
+        <div class="mb-3">
+          <label class="form-label text-dark" for="correo">Correo electrónico</label>
+          <input class="form-control" formControlName="email" id="correo" name="correo" placeholder="Correo electrónico"
+                 required type="email"/>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label text-dark" for="contraseña">Contraseña</label>
+          <input class="form-control" formControlName="contraseña" id="contraseña" name="contraseña"
+                 placeholder="Contraseña"
+                 required
+                 type="password"/>
+        </div>
+
+        <div class="mb-3 text-center">
+          <button class="btn btn-dark w-100" type="submit">Iniciar sesión</button>
+        </div>
+      </form>
+
+      <div class="mt-4 text-center">
+        <a class="btn btn-link text-dark" href="registrarse">¿No tienes cuenta? Regístrate</a>
+      </div>
+    </div>
+  </div>
+</div>
+

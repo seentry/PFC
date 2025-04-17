@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Usuario, Traje, Padre } from '../models/response.interface';
+import { Usuario, Traje, Padre, LoginRequest, LoginResponse } from '../models/response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +29,7 @@ export class RequestService {
 
   // Trajes
   public getTrajes(url: string): Observable<Traje[]> {
-    return this.http.get<any>(url, { headers: this.headers }).pipe(
-      map(response => response['hydra:member'] as Traje[])
-    );
+    return this.http.get<Traje[]>(url, { headers: this.headers });
   }
 
   public postTraje(url: string, traje: Traje): Observable<Traje> {
@@ -61,5 +59,9 @@ export class RequestService {
 
   public deletePadre(url: string): Observable<void> {
     return this.http.delete<void>(url, { headers: this.headers });
+  }
+  // Login
+  public login(url: string, credentials: any): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(url, credentials);
   }
 }

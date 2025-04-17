@@ -15,6 +15,7 @@ export interface Padre {
   anoInscripcion: string;
   estadoPagos: "debe" | "pagado";
   credito: number;
+  contrasena?: string;
 }
 
 export interface Traje {
@@ -24,4 +25,14 @@ export interface Traje {
   estado: "nuevo" | "aceptable" | "regular" | "mal";
   duenoOriginal: Padre;
   fechaIncorporacion: string;
+}
+
+export interface LoginResponse {
+  id: number;
+  email: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  contrasena: string;
 }

@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  public userStartSesion: boolean = false;
 
+  constructor() {
+    this.userStartSesion = localStorage.getItem('userId') !== null;
+  }
 }

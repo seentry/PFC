@@ -41,6 +41,12 @@ class Padres
     #[ORM\Column]
     private ?int $credito = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $contrasena = null;
+
     #[ORM\OneToMany(mappedBy: 'tutorLegal', targetEntity: Usuarios::class)]
     private ?Collection $hijos = null;
 
@@ -115,6 +121,30 @@ class Padres
     public function setCredito(int $credito): static
     {
         $this->credito = $credito;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getContrasena(): ?string
+    {
+        return $this->contrasena;
+    }
+
+    public function setContrasena(string $contrasena): static
+    {
+        $this->contrasena = $contrasena;
 
         return $this;
     }
