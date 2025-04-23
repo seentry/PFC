@@ -28,6 +28,8 @@ export class TrajesComponent {
 
   constructor(private service: RequestService, private fb: FormBuilder) { }
 
+  public loginUser = localStorage.getItem('userId')
+
   public ngOnInit(): void {
     console.log('Inicializando componente de trajes...');
     this.getTrajes();
@@ -117,8 +119,14 @@ export class TrajesComponent {
     if (this.trajeForm.invalid) {
       return;
     }
+    
+ const formValue = this.trajeForm.value;
 
-    const nuevoTraje: Traje = this.trajeForm.value;
+ const nuevoTraje: Traje = {
+   ...formValue,
+   disponible: true
+ };
+ 
     this.service.postTraje(this.apiUrlTrajes, nuevoTraje).subscribe({
       next: () => {
         this.getTrajes();

@@ -32,6 +32,10 @@ class Trajes
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaIncorporacion = null;
 
+    // Nuevo campo disponible
+    #[ORM\Column(type: 'boolean')]
+    private bool $disponible = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,10 +55,8 @@ class Trajes
         }
 
         $this->tipo = $tipo;
-
         return $this;
     }
-
 
     public function getTalla(): ?int
     {
@@ -64,7 +66,6 @@ class Trajes
     public function setTalla(int $talla): static
     {
         $this->talla = $talla;
-
         return $this;
     }
 
@@ -75,8 +76,7 @@ class Trajes
 
     public function setEstado(string $estado): static
     {
-        $estado = strtolower($estado); // Estandariza si lo deseas
-
+        $estado = strtolower($estado);
         $estadosPermitidos = ['nuevo', 'aceptable', 'regular', 'mal'];
 
         if (!in_array($estado, $estadosPermitidos, true)) {
@@ -84,10 +84,8 @@ class Trajes
         }
 
         $this->estado = $estado;
-
         return $this;
     }
-
 
     public function getDuenoOriginal(): ?Padres
     {
@@ -108,7 +106,17 @@ class Trajes
     public function setFechaIncorporacion(\DateTimeInterface $fechaIncorporacion): static
     {
         $this->fechaIncorporacion = $fechaIncorporacion;
+        return $this;
+    }
 
+    public function isDisponible(): bool
+    {
+        return $this->disponible;
+    }
+
+    public function setDisponible(bool $disponible): static
+    {
+        $this->disponible = $disponible;
         return $this;
     }
 }

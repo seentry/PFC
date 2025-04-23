@@ -25,6 +25,7 @@ export interface Traje {
   estado: "nuevo" | "aceptable" | "regular" | "mal";
   duenoOriginal: Padre;
   fechaIncorporacion: string;
+  disponible: boolean;
 }
 
 export interface LoginResponse {
