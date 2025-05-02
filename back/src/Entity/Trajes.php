@@ -32,7 +32,6 @@ class Trajes
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaIncorporacion = null;
 
-    // Nuevo campo disponible
     #[ORM\Column(type: 'boolean')]
     private bool $disponible = true;
 
