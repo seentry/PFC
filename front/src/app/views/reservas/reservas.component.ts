@@ -16,7 +16,7 @@ export class ReservasComponent implements OnInit {
   public trajesPaginados: Traje[] = [];
   public currentPage: number = 1;
   public itemsPerPage: number = 6;
-  private apiUrlTrajes = 'http://127.0.0.1:8000/api/trajes';
+  private apiUrlTrajes = 'http://localhost:8000/api/trajes';
 
   constructor(private service: RequestService) {}
 
