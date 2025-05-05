@@ -13,8 +13,8 @@ import {Router} from '@angular/router';
 })
 export class IniciarSesionComponent {
 
-  public apiSesion: string = 'http://localhost:8000/auth/login';
-  public apiUrlPadre: string = 'http://localhost:8000/api/padres';
+  public apiSesion: string = 'http://localhost:8001/auth/login';
+  public apiUrlPadre: string = 'http://localhost:8001/api/padres';
   public dataUser: Padre[] = [];
   reactiveForm = new FormGroup({
     email: new FormControl('', [Validators.required]),

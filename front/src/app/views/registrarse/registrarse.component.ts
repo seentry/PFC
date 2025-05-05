@@ -13,7 +13,7 @@ import {Router} from '@angular/router';
 })
 export class RegistrarseComponent {
 
-  public apiUrlPadre: string = 'http://localhost:8000/api/padres';
+  public apiUrlPadre: string = 'http://localhost:8001/api/padres';
   public dataUserClient: Padre[] = [];
   reactiveForm = new FormGroup({
     nombre: new FormControl(''),
