@@ -19,7 +19,7 @@ export class RegistrarseComponent {
     nombre: new FormControl(''),
     apellidos: new FormControl(''),
     email: new FormControl(''),
-    contraseña: new FormControl(''),
+    contrasena: new FormControl(''),
   });
 
   constructor(private service: RequestService, private router: Router) {
@@ -53,15 +53,15 @@ export class RegistrarseComponent {
       nombre: this.reactiveForm.value.nombre ?? '',
       apellidos: this.reactiveForm.value.apellidos ?? '',
       email: this.reactiveForm.value.email ?? '',
-      contrasena: this.reactiveForm.value.contraseña ?? undefined,
+      contrasena: this.reactiveForm.value.contrasena ?? undefined,
       anoInscripcion: today,
       estadoPagos: 'pagado',
       credito: 0
     };
 
     this.service.createPadre(this.apiUrlPadre, newParent).subscribe(
-      (response) => console.log('Cita creada con éxito:', response),
-      (error) => console.error('Error al crear cita:', error)
+      (response) => console.log('usuario creada con éxito:', response),
+      (error) => console.error('Error al crear usuario:', error)
     )
 
     this.router.navigate(["/inicio_sesion"]);

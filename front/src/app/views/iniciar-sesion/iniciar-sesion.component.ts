@@ -18,7 +18,7 @@ export class IniciarSesionComponent {
   public dataUser: Padre[] = [];
   reactiveForm = new FormGroup({
     email: new FormControl('', [Validators.required]),
-    contraseña: new FormControl('', [Validators.required])
+    contrasena: new FormControl('', [Validators.required])
   });
 
   constructor(private service: RequestService, private router: Router) {
@@ -44,7 +44,7 @@ export class IniciarSesionComponent {
   private startSesion(): void {
     const takeData = {
       email: this.reactiveForm.value.email ?? '',
-      contrasena: this.reactiveForm.value.contraseña ?? ''
+      contrasena: this.reactiveForm.value.contrasena ?? ''
     };
 
     this.service.login(this.apiSesion, takeData).subscribe(
