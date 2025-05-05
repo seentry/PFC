@@ -37,7 +37,7 @@ export class ReservasComponent implements OnInit {
     });
   }
 
-  private updatePagination(): void {
+  public updatePagination(): void {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     this.trajesPaginados = this.trajesDisponibles.slice(start, start + this.itemsPerPage);
   }

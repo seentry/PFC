@@ -11,8 +11,8 @@ import {Traje, Padre} from '../../models/response.interface';
   styleUrl: './mi-perfil.component.css'
 })
 export class MiPerfilComponent {
-  private urlPadres = 'http://127.0.0.1:8000/api/padres/';
-  private urlTrajes = 'http://127.0.0.1:8000/api/trajes/';
+  private urlPadres = 'http://localhost:8000/api/padres/';
+  private urlTrajes = 'http://localhost:8000/api/trajes/';
   public parent: Padre | null = null;
   public suit: Traje[] = [];
   private mainId = localStorage.getItem('userId');

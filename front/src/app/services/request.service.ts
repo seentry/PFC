@@ -16,49 +16,49 @@ export class RequestService {
 
   // Usuarios
   public getUsuarios(url: string): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(url, { headers: this.headers });
+    return this.http.get<Usuario[]>(url);
   }
 
   public getUsuario(url: string): Observable<Usuario> {
-    return this.http.get<Usuario>(url, { headers: this.headers });
+    return this.http.get<Usuario>(url);
   }
 
   public createUsuario(url: string, usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(url, usuario, { headers: this.headers });
+    return this.http.post<Usuario>(url, usuario);
   }
 
   // Trajes
   public getTrajes(url: string): Observable<Traje[]> {
-    return this.http.get<Traje[]>(url, { headers: this.headers });
+    return this.http.get<Traje[]>(url);
   }
 
   public postTraje(url: string, traje: Traje): Observable<Traje> {
-    return this.http.post<Traje>(url, traje, { headers: this.headers });
+    return this.http.post<Traje>(url, traje);
   }
 
   public updateTraje(url: string, traje: Traje): Observable<Traje> {
-    return this.http.patch<Traje>(url, traje, { headers: this.headers });
+    return this.http.patch<Traje>(url, traje);
   }
 
   public deleteTraje(url: string): Observable<void> {
-    return this.http.delete<void>(url, { headers: this.headers });
+    return this.http.delete<void>(url);
   }
 
   // Padres
   public getPadres(url: string): Observable<Padre[]> {
-    return this.http.get<Padre[]>(url, { headers: this.headers });
+    return this.http.get<Padre[]>(url);
   }
 
   public createPadre(url: string, padre: Padre): Observable<Padre> {
-    return this.http.post<Padre>(url, padre, { headers: this.headers });
+    return this.http.post<Padre>(url, padre);
   }
 
   public updatePadre(url: string, padre: Padre): Observable<Padre> {
-    return this.http.patch<Padre>(url, padre, { headers: this.headers });
+    return this.http.patch<Padre>(url, padre);
   }
 
   public deletePadre(url: string): Observable<void> {
-    return this.http.delete<void>(url, { headers: this.headers });
+    return this.http.delete<void>(url);
   }
   // Login
   public login(url: string, credentials: any): Observable<LoginResponse> {
