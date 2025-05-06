@@ -1,81 +1,63 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Padres;
-use App\Form\PadresType;
 use App\Repository\PadresRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/padres')]
-final class PadresController extends AbstractController
+class PadresController extends AbstractController
 {
-    #[Route(name: 'app_padres_index', methods: ['GET'])]
-    public function index(PadresRepository $padresRepository): Response
+    #[Route('/api/padres', name: 'padres_list', methods: ['GET'])]
+    public function list(PadresRepository $repo): JsonResponse
     {
-        return $this->render('padres/index.html.twig', [
-            'padres' => $padresRepository->findAll(),
-        ]);
+        $padres = $repo->findAll();
+        $resp = $this->json($padres, Response::HTTP_OK, [], ['groups' => ['padres']]);
+        $resp->headers->set('Access-Control-Allow-Origin', '*');
+        return $resp;
     }
 
-    #[Route('/api/new', name: 'app_padres_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/api/padres/{id}', name: 'padre_detail', methods: ['GET'])]
+    public function detail(Padres $padre): JsonResponse
     {
+        $resp = $this->json($padre, Response::HTTP_OK, [], ['groups' => ['padres']]);
+        $resp->headers->set('Access-Control-Allow-Origin', '*');
+        return $resp;
+    }
+
+    #[Route('/api/padres', name: 'padre_create', methods: ['POST'])]
+    public function create(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
         $padre = new Padres();
-        $form = $this->createForm(PadresType::class, $padre);
-        $form->handleRequest($request);
+        $padre->setNombre($data['nombre']);
+        $padre->setApellidos($data['apellidos']);
+        $padre->setAnoInscripcion(new \DateTime());
+        $padre->setEstadoPagos($data['estadoPagos'] ?? 'pagado');
+        $padre->setCredito($data['credito'] ?? 0);
+        $padre->setEmail($data['email']);
+        $padre->setContrasena(md5($data['contrasena']));
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($padre);
-            $entityManager->flush();
+        $em->persist($padre);
+        $em->flush();
 
-            return $this->redirectToRoute('app_padres_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('padres/new.html.twig', [
-            'padre' => $padre,
-            'form' => $form,
-        ]);
+        $resp = $this->json($padre, Response::HTTP_CREATED, [], ['groups' => ['padres']]);
+        $resp->headers->set('Access-Control-Allow-Origin', '*');
+        return $resp;
     }
 
-    #[Route('/api/{id}', name: 'app_padres_show', methods: ['GET'])]
-    public function show(Padres $padre): Response
+    #[Route('/api/padres/{id}', name: 'padre_delete', methods: ['DELETE'])]
+    public function delete(Padres $padre, EntityManagerInterface $em): JsonResponse
     {
-        return $this->render('padres/show.html.twig', [
-            'padre' => $padre,
-        ]);
-    }
+        $em->remove($padre);
+        $em->flush();
 
-    #[Route('/api/{id}/edit', name: 'app_padres_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Padres $padre, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(PadresType::class, $padre);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_padres_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('padres/edit.html.twig', [
-            'padre' => $padre,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/api/{id}', name: 'app_padres_delete', methods: ['POST'])]
-    public function delete(Request $request, Padres $padre, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$padre->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($padre);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_padres_index', [], Response::HTTP_SEE_OTHER);
+        $resp = new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        $resp->headers->set('Access-Control-Allow-Origin', '*');
+        return $resp;
     }
 }

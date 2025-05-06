@@ -13,12 +13,12 @@ import {Router} from '@angular/router';
 })
 export class IniciarSesionComponent {
 
-  public apiSesion: string = 'http://127.0.0.1/auth/login';
-  public apiUrlPadre: string = 'http://127.0.0.1/api/padres';
+  public apiSesion: string = 'http://localhost:8001/auth/login';
+  public apiUrlPadre: string = 'http://localhost:8001/api/padres';
   public dataUser: Padre[] = [];
   reactiveForm = new FormGroup({
     email: new FormControl('', [Validators.required]),
-    contraseña: new FormControl('', [Validators.required])
+    contrasena: new FormControl('', [Validators.required])
   });
 
   constructor(private service: RequestService, private router: Router) {
@@ -44,7 +44,7 @@ export class IniciarSesionComponent {
   private startSesion(): void {
     const takeData = {
       email: this.reactiveForm.value.email ?? '',
-      contrasena: this.reactiveForm.value.contraseña ?? ''
+      contrasena: this.reactiveForm.value.contrasena ?? ''
     };
 
     this.service.login(this.apiSesion, takeData).subscribe(
