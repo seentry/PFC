@@ -48,13 +48,12 @@ export class RegistrarseComponent {
 
   
   public createPadre(): void {
-    const today = new Date().toISOString().substring(0, 10);
     const newParent: Padre = {
       nombre: this.reactiveForm.value.nombre ?? '',
       apellidos: this.reactiveForm.value.apellidos ?? '',
       email: this.reactiveForm.value.email ?? '',
-      contrasena: this.reactiveForm.value.contrasena ?? undefined,
-      anoInscripcion: today,
+      contrasena: this.reactiveForm.value.contrasena ?? '',
+      anoInscripcion: new Date().toISOString(),
       estadoPagos: 'pagado',
       credito: 0
     };
