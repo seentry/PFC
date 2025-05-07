@@ -16,17 +16,13 @@ class PadresController extends AbstractController
     public function list(PadresRepository $repo): JsonResponse
     {
         $padres = $repo->findAll();
-        $resp = $this->json($padres, Response::HTTP_OK, [], ['groups' => ['padres']]);
-        $resp->headers->set('Access-Control-Allow-Origin', '*');
-        return $resp;
+        return $this->json($padres, Response::HTTP_OK, [], ['groups' => ['padres']]);
     }
 
     #[Route('/api/padres/{id}', name: 'padre_detail', methods: ['GET'])]
     public function detail(Padres $padre): JsonResponse
     {
-        $resp = $this->json($padre, Response::HTTP_OK, [], ['groups' => ['padres']]);
-        $resp->headers->set('Access-Control-Allow-Origin', '*');
-        return $resp;
+        return $this->json($padre, Response::HTTP_OK, [], ['groups' => ['padres']]);
     }
 
     #[Route('/api/padres', name: 'padre_create', methods: ['POST'])]
@@ -45,9 +41,7 @@ class PadresController extends AbstractController
         $em->persist($padre);
         $em->flush();
 
-        $resp = $this->json($padre, Response::HTTP_CREATED, [], ['groups' => ['padres']]);
-        $resp->headers->set('Access-Control-Allow-Origin', '*');
-        return $resp;
+        return $this->json($padre, Response::HTTP_CREATED, [], ['groups' => ['padres']]);
     }
 
     #[Route('/api/padres/{id}', name: 'padre_delete', methods: ['DELETE'])]
@@ -56,8 +50,6 @@ class PadresController extends AbstractController
         $em->remove($padre);
         $em->flush();
 
-        $resp = new JsonResponse(null, Response::HTTP_NO_CONTENT);
-        $resp->headers->set('Access-Control-Allow-Origin', '*');
-        return $resp;
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
