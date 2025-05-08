@@ -5,10 +5,8 @@ namespace App\Entity;
 use App\Repository\TrajesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: TrajesRepository::class)]
-#[ApiResource]
 class Trajes
 {
     #[ORM\Id]

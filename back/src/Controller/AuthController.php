@@ -18,7 +18,7 @@ class AuthController extends AbstractController
         $parameters = json_decode($request->getContent(), true);
         $email = $parameters['email'];
         $password = $parameters['contrasena'];
-
+        echo "estoy en login";
         // Hash password
         $password = md5($password);
 

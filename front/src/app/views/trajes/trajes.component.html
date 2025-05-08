@@ -2,42 +2,40 @@
 
 <div class="text-center my-5">
   @if (loginUser !== null) {
-    <button (click)="abrirFormulario()" class="btn btn-success" data-bs-target="#trajeModal" data-bs-toggle="modal">
-      Agregar Traje
-    </button>  } 
-    @else {
-    <button (click)="abrirFormulario()" class="btn btn-success" data-bs-target="#trajeModal" data-bs-toggle="modal" disabled>
-      Agregar Traje
-    </button>    
+    <button class="btn btn-success" (click)="abrirFormulario()">Agregar Traje</button>
+  } @else {
+    <button class="btn btn-success" disabled>Agregar Traje</button>
     <p class="text-danger mt-2">Inicia sesión para añadir traje</p>
   }
 </div>
 
-<div aria-hidden="true" aria-labelledby="trajeModalLabel" class="modal fade" id="trajeModal" tabindex="-1">
+<div class="modal fade" id="trajeModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="trajeModalLabel">Nuevo Traje</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        <h5 class="modal-title">Nuevo Traje</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      
       <div class="modal-body">
-        <form (ngSubmit)="agregarTraje()" [formGroup]="trajeForm">
+        <form [formGroup]="trajeForm" (ngSubmit)="agregarTraje()">
+          <!-- Tipo -->
           <div class="mb-3">
             <label class="form-label">Tipo</label>
-            <select class="form-select" formControlName="tipo" required>
+            <select formControlName="tipo" class="form-select" required>
               <option value="">Seleccionar Tipo</option>
               <option value="gala">Gala</option>
               <option value="normal">Normal</option>
             </select>
           </div>
+          <!-- Talla -->
           <div class="mb-3">
             <label class="form-label">Talla</label>
-            <input class="form-control" formControlName="talla" required type="number">
+            <input type="number" formControlName="talla" class="form-control" required>
           </div>
+          <!-- Estado -->
           <div class="mb-3">
             <label class="form-label">Estado</label>
-            <select class="form-select" formControlName="estado" required>
+            <select formControlName="estado" class="form-select" required>
               <option value="">Seleccionar Estado</option>
               <option value="nuevo">Nuevo</option>
               <option value="aceptable">Aceptable</option>
@@ -45,28 +43,30 @@
               <option value="mal">Mal</option>
             </select>
           </div>
+          <!-- Dueño Original -->
           <div class="mb-3">
             <label class="form-label">Dueño Original</label>
-            <select class="form-select" formControlName="duenoOriginal" required>
+            <select formControlName="duenoOriginal" class="form-select" required>
               <option value="">Seleccionar Dueño</option>
-              @for (padre of padres; track padre) {
+              @for (padre of padres; track padre.id) {
                 <option [ngValue]="padre">
                   {{ padre.nombre }} {{ padre.apellidos }}
                 </option>
               }
             </select>
           </div>
+          <!-- Fecha Incorporación -->
           <div class="mb-3">
             <label class="form-label">Fecha Incorporación</label>
-            <input class="form-control" formControlName="fechaIncorporacion" required type="date">
+            <input type="date" formControlName="fechaIncorporacion" class="form-control" required>
           </div>
+          <!-- Botones -->
           <div class="d-flex justify-content-between">
-            <button [disabled]="trajeForm.invalid" class="btn btn-primary" type="submit">Guardar</button>
-            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
+            <button class="btn btn-primary" [disabled]="trajeForm.invalid" type="submit">Guardar</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" (click)="cerrarFormulario()" type="button">Cancelar</button>
           </div>
         </form>
       </div>
-
     </div>
   </div>
 </div>
@@ -82,19 +82,14 @@
           [estado]="traje.estado"
           [duenoOriginal]="traje.duenoOriginal"
           [fechaIncorporacion]="traje.fechaIncorporacion"
-          (deleteTraje)="traje.id ? eliminarTraje(traje.id) : null">
+          (deleteTraje)="eliminarTraje(traje.id!)">
         </app-card-traje>
       }
     </div>
-
     <div class="pagination d-flex justify-content-center mt-5">
-      <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn btn-primary me-2">
-        Anterior
-      </button>
+      <button class="btn btn-primary me-2" (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
       <span class="fs-5 fw-bold mx-3">Página {{ currentPage }} de {{ totalPages() }}</span>
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="btn btn-primary ms-2">
-        Siguiente
-      </button>
+      <button class="btn btn-primary ms-2" (click)="nextPage()" [disabled]="currentPage === totalPages()">Siguiente</button>
     </div>
   </div>
 </div>

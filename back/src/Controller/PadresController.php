@@ -12,44 +12,49 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PadresController extends AbstractController
 {
-    #[Route('/api/padres', name: 'padres_list', methods: ['GET'])]
-    public function list(PadresRepository $repo): JsonResponse
+
+    #[Route('/api/padres', name: 'padres', methods: 'GET', format: 'json')]
+        public function getAllPadres(EntityManagerInterface $entityManager): JsonResponse
     {
-        $padres = $repo->findAll();
+        $padres = $entityManager->getRepository(Padres::class)->findAll();
+
         return $this->json($padres, Response::HTTP_OK, [], ['groups' => ['padres']]);
     }
 
-    #[Route('/api/padres/{id}', name: 'padre_detail', methods: ['GET'])]
-    public function detail(Padres $padre): JsonResponse
+    #[Route('/api/padres/{id}', name: 'padre_detail', methods: 'GET', format: 'json')]
+    public function getPadre(Padres $padre): JsonResponse
     {
         return $this->json($padre, Response::HTTP_OK, [], ['groups' => ['padres']]);
     }
 
-    #[Route('/api/padres', name: 'padre_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): JsonResponse
+    #[Route('/api/padres', name: 'padre_create', methods: 'POST', format: 'json')]
+    public function createPadre(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $padre = new Padres();
+
         $padre->setNombre($data['nombre']);
         $padre->setApellidos($data['apellidos']);
-        $padre->setAnoInscripcion(new \DateTime());
+        $padre->setAnoInscripcion(new \DateTime($data['anoInscripcion']));
         $padre->setEstadoPagos($data['estadoPagos'] ?? 'pagado');
         $padre->setCredito($data['credito'] ?? 0);
         $padre->setEmail($data['email']);
         $padre->setContrasena(md5($data['contrasena']));
 
-        $em->persist($padre);
-        $em->flush();
+
+        $entityManager->persist($padre);
+        $entityManager->flush();
 
         return $this->json($padre, Response::HTTP_CREATED, [], ['groups' => ['padres']]);
     }
 
-    #[Route('/api/padres/{id}', name: 'padre_delete', methods: ['DELETE'])]
-    public function delete(Padres $padre, EntityManagerInterface $em): JsonResponse
+    #[Route('/api/padres/{id}', name: 'padre_delete', methods: ['DELETE'], format: 'json')]
+    public function deletePadre(Padres $padre, EntityManagerInterface $entityManager): JsonResponse
     {
-        $em->remove($padre);
-        $em->flush();
+        $entityManager->remove($padre);
+        $entityManager->flush();
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
+
 }

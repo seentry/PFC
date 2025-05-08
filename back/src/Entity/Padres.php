@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use App\Entity\Usuarios;
 use App\Repository\PadresRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
-
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: PadresRepository::class)]
-#[ApiResource]
 class Padres
 {
 
@@ -24,30 +22,39 @@ class Padres
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['padres','login'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['padres'])]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['padres'])]
     private ?string $apellidos = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['padres'])]
     private ?\DateTimeInterface $anoInscripcion = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['padres'])]
     private ?string $estadoPagos = null;
 
     #[ORM\Column]
+    #[Groups(['padres'])]
     private ?int $credito = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['padres', 'login'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['padres', 'login'])]
     private ?string $contrasena = null;
 
     #[ORM\OneToMany(mappedBy: 'tutorLegal', targetEntity: Usuarios::class)]
+    #[Groups(['padres'])]
     private ?Collection $hijos = null;
 
     public function __construct()

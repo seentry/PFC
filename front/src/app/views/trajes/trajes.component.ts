@@ -1,109 +1,106 @@
-import { Component } from '@angular/core';
+// src/app/views/trajes/trajes.component.ts
+import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../services/request.service';
 import { Traje, Padre } from '../../models/response.interface';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CardTrajeComponent } from '../../components/card-traje/card-traje.component';
 import { HttpClientModule } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trajes',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, CardTrajeComponent, HttpClientModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CardTrajeComponent,
+    HttpClientModule
+  ],
   templateUrl: './trajes.component.html',
   styleUrls: ['./trajes.component.css']
 })
-export class TrajesComponent {
+export class TrajesComponent implements OnInit {
   public trajes: Traje[] = [];
   public trajesPaginados: Traje[] = [];
-  public currentPage: number = 1;
-  public itemsPerPage: number = 6;
-  public apiUrlBase: string = 'http://localhost:8000/api';
-  public apiUrlTrajes: string = `${this.apiUrlBase}/trajes`;
-  public apiUrlPadres: string = `${this.apiUrlBase}/padres`;
-  public mostrarFormulario: boolean = false;
+  public padres: Padre[] = [];
+  public currentPage = 1;
+  public itemsPerPage = 6;
+  public mostrarFormulario = false;
   public trajeForm!: FormGroup;
 
-  public padres: Padre[] = [];
+  private apiBase = 'http://localhost:8001/api';
+  private urlTrajes = `${this.apiBase}/trajes`;
+  private urlPadres = `${this.apiBase}/padres`;
 
-  constructor(private service: RequestService, private fb: FormBuilder) { }
+  public loginUser = localStorage.getItem('userId');
 
-  public loginUser = localStorage.getItem('userId')
+  constructor(
+    private service: RequestService,
+    private fb: FormBuilder
+  ) {}
 
-  public ngOnInit(): void {
-    console.log('Inicializando componente de trajes...');
-    this.getTrajes();
-    this.getPadres();
+  ngOnInit(): void {
     this.initForm();
+    this.loadTrajes();
+    this.loadPadres();
   }
 
-  public getTrajes(): void {
-    console.log('Obteniendo trajes desde:', this.apiUrlTrajes);
-    this.service.getTrajes(this.apiUrlTrajes).subscribe(
-      (response: Traje[]) => {
-        console.log("Trajes recibidos:", response);
-        this.trajes = response;
-        this.actualizarPaginacion();
-      },
-      (error) => {
-        console.error("Error al obtener trajes:", error);
-        alert('Error al cargar los trajes. Por favor, verifica que el servidor esté corriendo.');
-      }
-    );
+  private initForm(): void {
+    this.trajeForm = this.fb.group({
+      tipo: ['', Validators.required],
+      talla: [null, [Validators.required, Validators.min(1)]],
+      estado: ['', Validators.required],
+      duenoOriginal: [null, Validators.required],
+      fechaIncorporacion: ['', Validators.required]
+    });
   }
 
-  public getPadres(): void {
-    const apiUrlPadres = `${this.apiUrlBase}/padres`;
-    console.log('Obteniendo padres desde:', apiUrlPadres);
-    this.service.getPadres(apiUrlPadres).subscribe(
-      (response: Padre[]) => {
-        console.log("Padres recibidos:", response);
-        this.padres = response;
-      },
-      (error) => {
-        console.error("Error al obtener padres:", error);
-        alert('Error al cargar los padres. Por favor, verifica que el servidor esté corriendo.');
-      }
-    );
+  private loadTrajes(): void {
+    this.service.getTrajes(this.urlTrajes)
+      .subscribe({
+        next: trajes => {
+          this.trajes = trajes;
+          this.updatePagination();
+        },
+        error: e => console.error('Error al cargar trajes', e)
+      });
   }
 
-  public actualizarPaginacion(): void {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    this.trajesPaginados = this.trajes.slice(startIndex, endIndex);
+  private loadPadres(): void {
+    this.service.getPadres(this.urlPadres)
+      .pipe(
+        // extrae hydra:member si viene en ese formato
+        map((res: any) => res['hydra:member'] as Padre[])
+      )
+      .subscribe({
+        next: padres => this.padres = padres,
+        error: e => console.error('Error al cargar padres', e)
+      });
+  }
+
+  public updatePagination(): void {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    this.trajesPaginados = this.trajes.slice(start, start + this.itemsPerPage);
   }
 
   public nextPage(): void {
     if (this.currentPage < this.totalPages()) {
       this.currentPage++;
-      this.actualizarPaginacion();
+      this.updatePagination();
     }
   }
 
   public prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.actualizarPaginacion();
+      this.updatePagination();
     }
   }
 
   public totalPages(): number {
     return Math.ceil(this.trajes.length / this.itemsPerPage);
-  }
-
-  public eliminarTraje(id: number): void {
-    if (id === undefined) return;
-    const deleteUrl = `${this.apiUrlTrajes}/${id}`;
-    this.service.deleteTraje(deleteUrl).subscribe({
-      next: () => {
-        this.trajes = this.trajes.filter(traje => traje.id !== id);
-        this.actualizarPaginacion();
-      },
-      error: (err) => {
-        console.error('Error eliminando el traje:', err);
-        alert('Hubo un error al eliminar el traje.');
-      }
-    });
   }
 
   public abrirFormulario(): void {
@@ -116,37 +113,31 @@ export class TrajesComponent {
   }
 
   public agregarTraje(): void {
-    if (this.trajeForm.invalid) {
-      return;
-    }
-    
- const formValue = this.trajeForm.value;
+    if (this.trajeForm.invalid) return;
 
- const nuevoTraje: Traje = {
-   ...formValue,
-   disponible: true
- };
- 
-    this.service.postTraje(this.apiUrlTrajes, nuevoTraje).subscribe({
-      next: () => {
-        this.getTrajes();
-        this.actualizarPaginacion();
-        this.cerrarFormulario();
-      },
-      error: (err) => {
-        console.error('Error al agregar el traje:', err);
-        alert('Hubo un error al agregar el traje.');
-      }
-    });
+    const nuevo: Traje = {
+      ...this.trajeForm.value,
+      disponible: true  // lo pediste antes
+    };
+
+    this.service.postTraje(this.urlTrajes, nuevo)
+      .subscribe({
+        next: () => {
+          this.loadTrajes();
+          this.cerrarFormulario();
+        },
+        error: e => console.error('Error al agregar traje', e)
+      });
   }
 
-  private initForm(): void {
-    this.trajeForm = this.fb.group({
-      tipo: ['', Validators.required],
-      talla: [0, [Validators.required, Validators.min(1)]],
-      estado: ['', Validators.required],
-      duenoOriginal: [null, Validators.required],
-      fechaIncorporacion: ['', Validators.required]
-    });
+  public eliminarTraje(id: number): void {
+    this.service.deleteTraje(`${this.urlTrajes}/${id}`)
+      .subscribe({
+        next: () => {
+          this.trajes = this.trajes.filter(t => t.id !== id);
+          this.updatePagination();
+        },
+        error: e => console.error('Error al eliminar traje', e)
+      });
   }
 }
