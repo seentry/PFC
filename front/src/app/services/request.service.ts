@@ -8,12 +8,6 @@ import { Usuario, Traje, Padre, LoginRequest, LoginResponse } from '../models/re
   providedIn: 'root'
 })
 export class RequestService {
-  private headers = new HttpHeaders({
-    'Content-Type':  'application/json',
-    'Accept':        'application/json'
-  });
-  
-
 
   constructor(private http: HttpClient) {}
 
