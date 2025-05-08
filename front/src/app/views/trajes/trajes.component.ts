@@ -45,7 +45,6 @@ export class TrajesComponent implements OnInit {
     this.initForm();
     this.loadTrajes();
     this.loadPadres();
-    this.getTrajes();
   }
 
   private initForm(): void {
@@ -58,22 +57,11 @@ export class TrajesComponent implements OnInit {
     });
   }
 
-  public getTrajes(): void {
-    this.service.getTrajes(this.urlTrajes)
-      .subscribe({
-        next: trajes => {
-          console.log('Trajes recibidos desde la API:', trajes);
-          this.trajes = trajes;
-          this.updatePagination();
-        },
-        error: e => console.error('Error al cargar trajes', e)
-      });
-  }
-
   public loadTrajes(): void {
     this.service.getTrajes(this.urlTrajes)
       .subscribe({
         next: trajes => {
+          console.log('Trajes recibidos desde la API:', trajes);
           this.trajes = trajes;
           this.updatePagination();
         },
