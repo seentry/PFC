@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\TrajesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: TrajesRepository::class)]
 class Trajes
@@ -12,25 +14,32 @@ class Trajes
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['trajes'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['trajes'])]
     private ?string $tipo = null;
 
     #[ORM\Column]
+    #[Groups(['trajes'])]
     private ?int $talla = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['trajes'])]
     private ?string $estado = null;
 
     #[ORM\ManyToOne(targetEntity: Padres::class)]
+    #[Groups(['trajes'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Padres $duenoOriginal = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['trajes'])]
     private ?\DateTimeInterface $fechaIncorporacion = null;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['trajes'])]
     private bool $disponible = true;
 
     public function getId(): ?int

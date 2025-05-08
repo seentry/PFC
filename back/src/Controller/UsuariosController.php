@@ -1,81 +1,54 @@
 <?php
-
+// src/Controller/UsuariosController.php
 namespace App\Controller;
 
 use App\Entity\Usuarios;
-use App\Form\UsuariosType;
 use App\Repository\UsuariosRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/usuarios')]
-final class UsuariosController extends AbstractController
+class UsuariosController extends AbstractController
 {
-    #[Route(name: 'app_usuarios_index', methods: ['GET'])]
-    public function index(UsuariosRepository $usuariosRepository): Response
+    #[Route('/api/usuarios', name: 'usuarios_list', methods: ['GET'])]
+    public function list(UsuariosRepository $repo): JsonResponse
     {
-        return $this->render('usuarios/index.html.twig', [
-            'usuarios' => $usuariosRepository->findAll(),
-        ]);
+        $users = $repo->findAll();
+        return $this->json($users, Response::HTTP_OK, [], ['groups' => ['usuarios']]);
     }
 
-    #[Route('/api/new', name: 'app_usuarios_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/api/usuarios/{id}', name: 'usuario_detail', methods: ['GET'])]
+    public function detail(Usuarios $usuario): JsonResponse
     {
-        $usuario = new Usuarios();
-        $form = $this->createForm(UsuariosType::class, $usuario);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($usuario);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_usuarios_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('usuarios/new.html.twig', [
-            'usuario' => $usuario,
-            'form' => $form,
-        ]);
+        return $this->json($usuario, Response::HTTP_OK, [], ['groups' => ['usuarios']]);
     }
 
-    #[Route('/api/{id}', name: 'app_usuarios_show', methods: ['GET'])]
-    public function show(Usuarios $usuario): Response
+    #[Route('/api/usuarios', name: 'usuario_create', methods: ['POST'])]
+    public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        return $this->render('usuarios/show.html.twig', [
-            'usuario' => $usuario,
-        ]);
+        $data = json_decode($request->getContent(), true);
+        $user = new Usuarios();
+        $user->setNombre($data['nombre']);
+        $user->setApellidos($data['apellidos']);
+        $user->setEdad($data['edad']);
+        $user->setAnoInscripcion($data['anoInscripcion']);
+        $user->setTutorLegal($data['tutorLegal']);
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->json($user, Response::HTTP_CREATED, [], ['groups' => ['usuarios']]);
     }
 
-    #[Route('/api/{id}/edit', name: 'app_usuarios_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Usuarios $usuario, EntityManagerInterface $entityManager): Response
+    #[Route('/api/usuarios/{id}', name: 'usuario_delete', methods: ['DELETE'])]
+    public function delete(Usuarios $usuario, EntityManagerInterface $em): JsonResponse
     {
-        $form = $this->createForm(UsuariosType::class, $usuario);
-        $form->handleRequest($request);
+        $em->remove($usuario);
+        $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_usuarios_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('usuarios/edit.html.twig', [
-            'usuario' => $usuario,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/api/{id}', name: 'app_usuarios_delete', methods: ['POST'])]
-    public function delete(Request $request, Usuarios $usuario, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$usuario->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($usuario);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_usuarios_index', [], Response::HTTP_SEE_OTHER);
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
