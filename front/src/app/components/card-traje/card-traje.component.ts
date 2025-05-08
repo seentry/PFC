@@ -16,10 +16,8 @@ export class CardTrajeComponent {
   @Input() estado: "nuevo" | "aceptable" | "regular" | "mal" = "nuevo";
   @Input() duenoOriginal!: Padre;
   @Input() fechaIncorporacion: string = '';
+  @Input() disponible: boolean = true;
 
   @Output() deleteTraje = new EventEmitter<void>();
 
-  onDelete(): void {
-    this.deleteTraje.emit();
-  }
 }

@@ -45,6 +45,7 @@ export class TrajesComponent implements OnInit {
     this.initForm();
     this.loadTrajes();
     this.loadPadres();
+    this.getTrajes();
   }
 
   private initForm(): void {
@@ -57,7 +58,19 @@ export class TrajesComponent implements OnInit {
     });
   }
 
-  private loadTrajes(): void {
+  public getTrajes(): void {
+    this.service.getTrajes(this.urlTrajes)
+      .subscribe({
+        next: trajes => {
+          console.log('Trajes recibidos desde la API:', trajes);
+          this.trajes = trajes;
+          this.updatePagination();
+        },
+        error: e => console.error('Error al cargar trajes', e)
+      });
+  }
+
+  public loadTrajes(): void {
     this.service.getTrajes(this.urlTrajes)
       .subscribe({
         next: trajes => {
@@ -68,10 +81,9 @@ export class TrajesComponent implements OnInit {
       });
   }
 
-  private loadPadres(): void {
+  public loadPadres(): void {
     this.service.getPadres(this.urlPadres)
       .pipe(
-        // extrae hydra:member si viene en ese formato
         map((res: any) => res['hydra:member'] as Padre[])
       )
       .subscribe({
@@ -117,7 +129,7 @@ export class TrajesComponent implements OnInit {
 
     const nuevo: Traje = {
       ...this.trajeForm.value,
-      disponible: true  // lo pediste antes
+      disponible: true
     };
 
     this.service.postTraje(this.urlTrajes, nuevo)
