@@ -1,7 +1,7 @@
 <h2 class="text-center mt-5 mb-4">Gestión Trajes</h2>
 
 <div class="text-center my-5">
-  @if (loginUser !== null) {
+  @if (loginUser) {
     <button class="btn btn-success" (click)="abrirFormulario()">Agregar Traje</button>
   } @else {
     <button class="btn btn-success" disabled>Agregar Traje</button>

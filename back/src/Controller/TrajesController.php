@@ -1,8 +1,10 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Padres;
 use App\Entity\Trajes;
 use App\Repository\TrajesRepository;
+use App\Repository\PadresRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrajesController extends AbstractController
 {
     #[Route('/api/trajes', name: 'trajes_list', methods: ['GET'])]
-    public function list(TrajesRepository $repo): JsonResponse
+    public function list(EntityManagerInterface $em): JsonResponse
     {
-        $trajes = $repo->findAll();
+        $trajes = $em->getRepository(Trajes::class)->findAll();
         return $this->json($trajes, Response::HTTP_OK, [], ['groups' => ['trajes']]);
     }
 
@@ -29,18 +31,20 @@ class TrajesController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         $traje = new Trajes();
         $traje->setTipo($data['tipo']);
         $traje->setTalla((int)$data['talla']);
         $traje->setEstado($data['estado']);
-
-        if (isset($data['duenoOriginal'])) {
-            $padre = $em->getRepository(\App\Entity\Padres::class)
-                ->find((int)basename($data['duenoOriginal']));
-            $traje->setDuenoOriginal($padre);
-        }
         $traje->setFechaIncorporacion(new \DateTime($data['fechaIncorporacion']));
         $traje->setDisponible($data['disponible'] ?? true);
+
+        if (!empty($data['duenoOriginal'])) {
+            $padre = $em->getRepository(Padres::class)->find((int)$data['duenoOriginal']);
+            if ($padre) {
+                $traje->setDuenoOriginal($padre);
+            }
+        }
 
         $em->persist($traje);
         $em->flush();

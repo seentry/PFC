@@ -29,10 +29,11 @@ class Trajes
     #[Groups(['trajes'])]
     private ?string $estado = null;
 
-    #[ORM\ManyToOne(targetEntity: Padres::class)]
-    #[Groups(['trajes'])]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['trajes'])]
     private ?Padres $duenoOriginal = null;
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['trajes'])]

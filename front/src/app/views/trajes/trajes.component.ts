@@ -8,6 +8,8 @@ import { CardTrajeComponent } from '../../components/card-traje/card-traje.compo
 import { HttpClientModule } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
+declare const bootstrap: any;
+
 @Component({
   selector: 'app-trajes',
   standalone: true,
@@ -44,7 +46,7 @@ export class TrajesComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.loadTrajes();
-    this.loadPadres();
+    this.getPadres();
   }
 
   private initForm(): void {
@@ -69,15 +71,14 @@ export class TrajesComponent implements OnInit {
       });
   }
 
-  public loadPadres(): void {
-    this.service.getPadres(this.urlPadres)
-      .pipe(
-        map((res: any) => res['hydra:member'] as Padre[])
-      )
-      .subscribe({
-        next: padres => this.padres = padres,
-        error: e => console.error('Error al cargar padres', e)
-      });
+  public getPadres(): void {
+    this.service.getPadres(this.urlPadres).subscribe({
+      next: padres => {
+        console.log('Padres recibidos:', padres);
+        this.padres = padres;
+      },
+      error: e => console.error('Error al cargar padres', e)
+    });
   }
 
   public updatePagination(): void {
@@ -104,13 +105,15 @@ export class TrajesComponent implements OnInit {
   }
 
   public abrirFormulario(): void {
-    this.mostrarFormulario = true;
-  }
+    const modalEl = document.getElementById('trajeModal');
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();  }
 
   public cerrarFormulario(): void {
     this.trajeForm.reset();
-    this.mostrarFormulario = false;
-  }
+    const modalEl = document.getElementById('trajeModal');
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal?.hide();  }
 
   public agregarTraje(): void {
     if (this.trajeForm.invalid) return;

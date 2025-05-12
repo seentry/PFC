@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Trajes;
 use App\Repository\PadresRepository;
+use App\Repository\TrajesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -53,6 +55,9 @@ class Padres
     #[Groups(['padres', 'login'])]
     private ?string $contrasena = null;
 
+    #[ORM\OneToMany(mappedBy: 'duenoOriginal', targetEntity: Trajes::class)]
+    #[Groups(['padres'])]
+    private Collection $trajes;
     #[ORM\OneToMany(mappedBy: 'tutorLegal', targetEntity: Usuarios::class)]
     #[Groups(['padres'])]
     private ?Collection $hijos = null;

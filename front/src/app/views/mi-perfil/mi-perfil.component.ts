@@ -26,15 +26,17 @@ export class MiPerfilComponent {
       return;
     }
 
-    this.service.getPadres(this.urlPadres + this.mainId).subscribe({
-      next: (arr: Padre[]) => {
-        this.parent = arr.length ? arr[0] : null;
+    this.service.getPadre(`${this.urlPadres}${this.mainId}`)
+    .subscribe({
+      next: padre => {
+        this.parent = padre;
       },
-      error: (err: any) => console.error('No se pudo cargar el padre:', err)
+      error: err => console.error('No se pudo cargar el padre:', err)
     });
 
-    this.loadTrajes();
-  }
+  this.loadTrajes();
+}
+
 
   get user(): Padre | null {
     return this.parent;
@@ -61,9 +63,11 @@ export class MiPerfilComponent {
     });
   }
 
+
   public logout() {
     localStorage.clear()
     this.router.navigate(['/inicio']).then(() => {
       window.location.reload();
-    });  }
+    });  
+  }
 }
