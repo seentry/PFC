@@ -46,6 +46,10 @@ export class RequestService {
     return this.http.get<Padre[]>(url);
   }
 
+  public getPadre(url: string): Observable<Padre> {
+    return this.http.get<Padre>(url);
+  }
+
   public createPadre(url: string, padre: Padre): Observable<Padre> {
     return this.http.post<Padre>(url, padre);
   }
