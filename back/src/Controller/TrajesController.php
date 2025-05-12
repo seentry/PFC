@@ -1,5 +1,4 @@
 <?php
-// src/Controller/TrajesController.php
 namespace App\Controller;
 
 use App\Entity\Trajes;

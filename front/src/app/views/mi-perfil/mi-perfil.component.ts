@@ -61,9 +61,9 @@ export class MiPerfilComponent {
     });
   }
 
-
   public logout() {
     localStorage.clear()
-    this.router.navigateByUrl('/inicio')
-  }
+    this.router.navigate(['/inicio']).then(() => {
+      window.location.reload();
+    });  }
 }

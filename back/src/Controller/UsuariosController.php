@@ -1,5 +1,4 @@
 <?php
-// src/Controller/UsuariosController.php
 namespace App\Controller;
 
 use App\Entity\Usuarios;

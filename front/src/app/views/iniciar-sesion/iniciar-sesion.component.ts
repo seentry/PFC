@@ -50,12 +50,20 @@ export class IniciarSesionComponent {
     this.service.login(this.apiSesion, takeData).subscribe(
       (response: LoginResponse) => {
         console.log("Inicio de sesión exitoso:", response);
-        this.router.navigate(["/inicio"]);
+        this.checkSession(response.id);
+        this.router.navigate(['/inicio']).then(() => {
+          window.location.reload();
+        });
       },
       (error) => {
         console.error("Error al iniciar sesión:", error);
         alert("Correo o contraseña incorrectos. Inténtalo de nuevo.");
       }
     );
+  }
+
+  public checkSession(idUser: number,): void {
+    localStorage.setItem('userId', idUser.toString());
+    console.log("Sesión iniciada con el usuario ID:", idUser);
   }
 }
