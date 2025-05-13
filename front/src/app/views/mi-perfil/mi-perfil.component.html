@@ -1,47 +1,70 @@
 <div class="container mt-5">
-    <div class="profile-container mb-5">
-      <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-body">
-          <h1 class="text-center mb-4">Mi Perfil</h1>
-          @if (parent) {
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><strong>Nombre:</strong> {{ parent.nombre }}</li>
-              <li class="list-group-item"><strong>Apellidos:</strong> {{ parent.apellidos }}</li>
-              <li class="list-group-item"><strong>Email:</strong> {{ parent.email }}</li>
-              <li class="list-group-item"><strong>Creditos:</strong> {{ parent.credito }}</li>
-            </ul>
-          } @else {
-            <p class="text-center text-muted">Cargando perfil...</p>
-          }
-          <button (click)="logout()" class="btn btn-danger w-100 mt-4">
-            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-          </button>
-        </div>
-      </div>
-    </div>
-  
-  
-    <h1 class="mb-4 text-center">Mis Trajes</h1>
-    <div class="appointments-container">
-      <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-body p-0">
-          <table class="table table-hover table-striped text-center mb-0">
-            <thead class="table-dark">
-              <tr>
-                <th>Tipo</th>
-                <th>Talla</th>
-                <th>Estado</th>
-                <th>Dueño</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-            </tbody>
-          </table>
-        </div>
+  <div class="profile-container mb-5">
+    <div class="card shadow-lg border-0 rounded-3">
+      <div class="card-body">
+        <h1 class="text-center mb-4">Mi Perfil</h1>
+        @if (parent) {
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Nombre:</strong> {{ parent.nombre }}</li>
+            <li class="list-group-item"><strong>Apellidos:</strong> {{ parent.apellidos }}</li>
+            <li class="list-group-item"><strong>Email:</strong> {{ parent.email }}</li>
+            <li class="list-group-item"><strong>Créditos:</strong> {{ parent.credito }}</li>
+          </ul>
+        } @else {
+          <p class="text-center text-muted">Cargando perfil...</p>
+        }
+        <button (click)="logout()" class="btn btn-danger w-100 mt-4">
+          <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+        </button>
       </div>
     </div>
   </div>
-  
+
+  <h1 class="mb-4 text-center">Mis Trajes Reservados</h1>
+  <div class="appointments-container">
+    <div class="card shadow-lg border-0 rounded-3">
+      <div class="card-body p-0">
+        <table class="table table-hover table-striped text-center mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>Tipo</th>
+              <th>Talla</th>
+              <th>Estado</th>
+              <th>Dueño Original</th>
+              <th>Fecha</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (reservedTrajes.length === 0) {
+              <tr>
+                <td colspan="6" class="text-center text-muted">
+                  No tienes trajes reservados.
+                </td>
+              </tr>
+            } @else {
+              @for (traje of reservedTrajes; track traje.id) {
+                <tr>
+                  <td>{{ traje.tipo }}</td>
+                  <td>{{ traje.talla }}</td>
+                  <td>{{ traje.estado }}</td>
+                  <td>
+                    {{ traje.duenoOriginal?.nombre }} {{ traje.duenoOriginal?.apellidos }}
+                  </td>
+                  <td>{{ traje.fechaIncorporacion }}</td>
+                  <td>
+                    <button
+                      class="btn btn-sm btn-danger"
+                      (click)="cancelTraje(traje.id)">
+                      Cancelar
+                    </button>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

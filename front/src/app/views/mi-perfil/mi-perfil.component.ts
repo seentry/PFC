@@ -11,58 +11,56 @@ import {Traje, Padre} from '../../models/response.interface';
   styleUrl: './mi-perfil.component.css'
 })
 export class MiPerfilComponent {
-  private urlPadres = 'http://localhost:8001/api/padres/';
-  private urlTrajes = 'http://localhost:8001/api/trajes/';
   public parent: Padre | null = null;
-  public suit: Traje[] = [];
-  private mainId = localStorage.getItem('userId');
+  public reservedTrajes: Traje[] = [];
 
-  constructor(private service: RequestService, protected router: Router) {
+  public urlPadres = 'http://localhost:8001/api/padres/';
+  public urlTrajes = 'http://localhost:8001/api/trajes';
+  public userId = Number(localStorage.getItem('userId'));
+
+  constructor(public service: RequestService, protected router: Router) {
   }
 
-  public ngOnInit(): void {
-    if (!this.mainId) {
+   public ngOnInit(): void {
+    if (!this.userId) {
       this.router.navigate(['login']);
       return;
     }
+    this.loadParent();
+    this.loadReservedTrajes();
+  }
 
-    this.service.getPadre(`${this.urlPadres}${this.mainId}`)
-    .subscribe({
+  public loadParent(): void {
+    this.service.getPadres(this.urlPadres + this.userId).subscribe({
       next: padre => {
-        this.parent = padre;
+        this.parent = padre as any;
       },
       error: err => console.error('No se pudo cargar el padre:', err)
     });
-
-  this.loadTrajes();
-}
-
-
-  get user(): Padre | null {
-    return this.parent;
   }
 
-  private loadTrajes(): void {
-    const url = `${this.urlTrajes}user/${this.mainId}`;
-    this.service.getTrajes(url).subscribe({
-      next: (list: Traje[]) => {
-        list.forEach(t => {
-          const d = new Date(t.fechaIncorporacion);
-          t.fechaIncorporacion = d.toLocaleString('es-ES', { timeZone: 'UTC' });
-        });
-        this.suit = list;
+  public loadReservedTrajes(): void {
+    this.service.getTrajes(this.urlTrajes).subscribe({
+      next: all => {
+        this.reservedTrajes = all.filter(t =>
+          t.reservadoPor === this.userId
+        );
+        console.log('Trajes reservados por mí:', this.reservedTrajes);
       },
-      error: (err: any) => console.error('Error cargando trajes:', err)
+      error: err => console.error('Error cargando trajes:', err)
     });
   }
 
   public cancelTraje(id: number): void {
-    this.service.deleteTraje(this.urlTrajes + id).subscribe({
-      next: () => this.loadTrajes(),
-      error: (err: any) => console.error('Error eliminando traje:', err)
+    this.service.deleteTraje(`${this.urlTrajes}/${id}`).subscribe({
+      next: () => this.loadReservedTrajes(),
+      error: err => console.error('Error eliminando traje:', err)
     });
   }
 
+  get user(): Padre | null {
+    return this.parent;
+  }
 
   public logout() {
     localStorage.clear()
