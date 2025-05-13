@@ -54,7 +54,7 @@ class Padres
     #[ORM\Column(length: 255)]
     #[Groups(['padres', 'login'])]
     private ?string $contrasena = null;
-
+ 
     #[ORM\OneToMany(mappedBy: 'duenoOriginal', targetEntity: Trajes::class)]
     #[Groups(['padres'])]
     private Collection $trajes;

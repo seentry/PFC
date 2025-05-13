@@ -31,7 +31,7 @@ class Trajes
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['trajes'])]
+    #[Groups(['trajes','padres'])]
     private ?Padres $duenoOriginal = null;
 
 
