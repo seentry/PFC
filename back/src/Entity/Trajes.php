@@ -43,6 +43,11 @@ class Trajes
     #[Groups(['trajes'])]
     private bool $disponible = true;
 
+    #[ORM\ManyToOne(targetEntity: Padres::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['trajes'])]
+    private ?Padres $reservadoPor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -124,6 +129,18 @@ class Trajes
     public function setDisponible(bool $disponible): static
     {
         $this->disponible = $disponible;
+        return $this;
+    }
+
+    public function getReservadoPor(): ?Padres
+    {
+        return $this->reservadoPor;
+    }
+
+    public function setReservadoPor(?Padres $padre): static
+    {
+        $this->reservadoPor = $padre;
+
         return $this;
     }
 }

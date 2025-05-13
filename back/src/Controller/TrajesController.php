@@ -28,7 +28,7 @@ class TrajesController extends AbstractController
     }
 
     #[Route('/api/trajes', name: 'traje_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): JsonResponse
+    public function create(Request $request, EntityManagerInterface $em, PadresRepository $padresRepo): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -38,12 +38,15 @@ class TrajesController extends AbstractController
         $traje->setEstado($data['estado']);
         $traje->setFechaIncorporacion(new \DateTime($data['fechaIncorporacion']));
         $traje->setDisponible($data['disponible'] ?? true);
-
         if (!empty($data['duenoOriginal'])) {
             $padre = $em->getRepository(Padres::class)->find((int)$data['duenoOriginal']);
             if ($padre) {
                 $traje->setDuenoOriginal($padre);
             }
+        }
+        if (!empty($data['reservadoPor'])) {
+            $padre = $padresRepo->find($data['reservadoPor']);
+            $traje->setReservadoPor($padre);
         }
 
         $em->persist($traje);
