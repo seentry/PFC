@@ -17,5 +17,12 @@
         </p>
       </div>
     </div>
+    <div class="d-flex justify-content-around mt-auto">
+      @if (disponible) {
+        <button (click)="onReserve()" class="btn btn-success">
+          Reservar
+        </button>
+      }
+    </div>
   </div>
 </div>

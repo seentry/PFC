@@ -10,7 +10,8 @@
           [talla]="traje.talla"
           [estado]="traje.estado"
           [duenoOriginal]="traje.duenoOriginal"
-          [fechaIncorporacion]="traje.fechaIncorporacion">
+          [fechaIncorporacion]="traje.fechaIncorporacion"
+          (reserveTraje)="reservarTraje($event)">
         </app-card-traje>
       }
     </div>

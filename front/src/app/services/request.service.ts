@@ -33,12 +33,16 @@ export class RequestService {
     return this.http.post<Traje>(url, traje);
   }
 
-  public updateTraje(url: string, traje: Traje): Observable<Traje> {
+  public updateTraje(url: string, traje: Partial<Traje>): Observable<Traje> {
     return this.http.patch<Traje>(url, traje);
   }
 
   public deleteTraje(url: string): Observable<void> {
     return this.http.delete<void>(url);
+  }
+
+  public patchTraje(url: string, partial: Partial<Traje>): Observable<Traje> {
+  return this.http.patch<Traje>(url, partial);
   }
 
   // Padres

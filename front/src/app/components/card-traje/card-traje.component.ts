@@ -18,6 +18,15 @@ export class CardTrajeComponent {
   @Input() fechaIncorporacion: string = '';
   @Input() disponible: boolean = true;
 
-  @Output() deleteTraje = new EventEmitter<void>();
+  @Output() deleteTraje = new EventEmitter<number>();
+  @Output() reserveTraje = new EventEmitter<number>();
+
+  public onDelete(): void {
+    this.deleteTraje.emit(this.id);
+  }
+
+  public onReserve(): void {
+    this.reserveTraje.emit(this.id);
+  }
 
 }

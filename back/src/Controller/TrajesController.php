@@ -63,4 +63,53 @@ class TrajesController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
+
+    #[Route('/api/trajes/{id}', name: 'traje_update', methods: ['PATCH'])]
+    public function update(
+        int $id,
+        Request $request,
+        EntityManagerInterface $em,
+        TrajesRepository $trajesRepo,
+        PadresRepository $padresRepo
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+
+        $traje = $trajesRepo->find($id);
+        if (!$traje) {
+            return $this->json(['error' => 'Traje no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Campos opcionales: sólo aplicamos si vienen en el request
+        if (array_key_exists('tipo', $data)) {
+            $traje->setTipo($data['tipo']);
+        }
+        if (array_key_exists('talla', $data)) {
+            $traje->setTalla((int)$data['talla']);
+        }
+        if (array_key_exists('estado', $data)) {
+            $traje->setEstado($data['estado']);
+        }
+        if (array_key_exists('fechaIncorporacion', $data)) {
+            $traje->setFechaIncorporacion(new \DateTime($data['fechaIncorporacion']));
+        }
+        if (array_key_exists('disponible', $data)) {
+            $traje->setDisponible((bool)$data['disponible']);
+        }
+        if (array_key_exists('duenoOriginal', $data)) {
+            $padre = $padresRepo->find((int)$data['duenoOriginal']);
+            $traje->setDuenoOriginal($padre);
+        }
+        if (array_key_exists('reservadoPor', $data)) {
+            $padre = $data['reservadoPor'] !== null
+                ? $padresRepo->find((int)$data['reservadoPor'])
+                : null;
+            $traje->setReservadoPor($padre);
+        }
+
+        $em->persist($traje);
+        $em->flush();
+
+        return $this->json($traje, Response::HTTP_OK, [], ['groups' => ['trajes']]);
+    }
+
 }
