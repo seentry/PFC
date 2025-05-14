@@ -26,7 +26,7 @@ export interface Traje {
   duenoOriginal: Padre;
   fechaIncorporacion: string;
   disponible: boolean;
-  reservadoPor?: Padre;
+  reservadoPor?: number | Padre;
 }
 
 export interface LoginResponse {

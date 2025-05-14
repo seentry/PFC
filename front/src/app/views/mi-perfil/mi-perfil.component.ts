@@ -27,17 +27,25 @@ export class MiPerfilComponent implements OnInit {
     }
 
     this.service.getPadre(this.urlPadres + this.mainId).subscribe({
-    next: (padre: Padre) => {
-      this.parent = padre;
-    },
-    error: err => console.error('No se pudo cargar el padre:', err)
-  });
+      next: (padre: Padre) => {
+        this.parent = padre;
+      },
+      error: err => console.error('No se pudo cargar el padre:', err)
+    });
 
   this.service.getTrajes(this.urlTrajes).subscribe({
     next: (all: Traje[]) => {
       console.log('Todos los trajes:', all);
+      
       this.reservedTrajes = all
-        .filter(t => t.reservadoPor?.id === this.mainId)
+        .filter(t => {
+          if (typeof t.reservadoPor === 'number') {
+            return t.reservadoPor === this.mainId;
+          } else if (t.reservadoPor && typeof t.reservadoPor === 'object') {
+            return t.reservadoPor.id === this.mainId;
+          }
+          return false;
+        })
         .map(t => {
           t.fechaIncorporacion = new Date(t.fechaIncorporacion)
             .toLocaleDateString('es-ES');

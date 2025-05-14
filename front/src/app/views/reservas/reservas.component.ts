@@ -4,6 +4,7 @@ import { Traje, Padre } from '../../models/response.interface';
 import { CommonModule } from '@angular/common';
 import { CardTrajeComponent } from '../../components/card-traje/card-traje.component';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reservas',
@@ -24,17 +25,34 @@ export class ReservasComponent {
 
   public userId = Number(localStorage.getItem('userId'));
 
-  constructor(public service: RequestService) {}
+  public currentParent!: Padre;
+
+  constructor(public service: RequestService, private router: Router) {}
 
   ngOnInit(): void {
-    this.getTrajesDisponibles();
+    if (!this.userId) {
+      alert('Debes iniciar sesión para ver reservas');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.service.getPadre(`${this.apiUrlPadres}/${this.userId}`)
+    .subscribe({
+      next: p => {
+        this.currentParent = p;
+        this.getTrajesDisponibles();
+      },
+      error: err => {
+        console.error('Error al cargar padre:', err);
+        alert('No se pudo cargar tu perfil.');
+      }
+    });
   }
 
   public getTrajesDisponibles(): void {
     this.service.getTrajes(this.apiUrlTrajes).subscribe({
-      next: (all: Traje[]) => {
+      next: all => {
         this.trajes = all.filter(t => t.disponible);
-        console.log('Trajes disponibles:', this.trajes);
         this.actualizarPaginacion();
       },
       error: err => {
@@ -87,29 +105,21 @@ export class ReservasComponent {
       return;
     }
   
-    this.service.getPadre(`${this.apiUrlPadres}/${this.userId}`).subscribe({
-      next: (padre: Padre) => {
-        const url = `${this.apiUrlTrajes}/${id}`;
-        const update: Partial<Traje> = {
-          disponible: false,
-          reservadoPor: padre
-        };
+    const url = `${this.apiUrlTrajes}/${id}`;
+    const update: Partial<Traje> = {
+      disponible: false,
+      reservadoPor: this.userId // Solo el ID
+    };
   
-        this.service.updateTraje(url, update).subscribe({
-          next: updated => {
-            console.log('Traje reservado:', updated);
-            alert(`Has reservado el traje ${id} correctamente.`);
-            this.getTrajesDisponibles();
-          },
-          error: err => {
-            console.error('Error al reservar traje:', err);
-            alert('No se pudo reservar el traje.');
-          }
-        });
+    this.service.updateTraje(url, update).subscribe({
+      next: updated => {
+        console.log('Traje reservado:', updated);
+        alert(`Has reservado el traje ${id} correctamente.`);
+        this.router.navigate(['/perfil']);
       },
       error: err => {
-        console.error('Error al obtener datos del padre:', err);
-        alert('Error al procesar la reserva.');
+        console.error('Error al reservar traje:', err);
+        alert('No se pudo reservar el traje.');
       }
     });
   }
