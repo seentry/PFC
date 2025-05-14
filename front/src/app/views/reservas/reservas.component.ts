@@ -81,27 +81,35 @@ export class ReservasComponent {
     return Math.ceil(this.trajes.length / this.itemsPerPage);
   }
 
-   public reservarTraje(id: number): void {
+  public reservarTraje(id: number): void {
     if (!this.userId) {
       alert('Debes iniciar sesión para reservar');
       return;
     }
-
-    const url = `${this.apiUrlTrajes}/${id}`;
-    const update: Partial<Traje> = {
-      disponible: false,
-      reservadoPor: this.userId
-    };
-
-    this.service.updateTraje(url, update).subscribe({
-      next: updated => {
-        console.log('Traje reservado:', updated);
-        alert(`Has reservado el traje ${id} correctamente.`);
-        this.getTrajesDisponibles();
+  
+    this.service.getPadre(`${this.apiUrlPadres}/${this.userId}`).subscribe({
+      next: (padre: Padre) => {
+        const url = `${this.apiUrlTrajes}/${id}`;
+        const update: Partial<Traje> = {
+          disponible: false,
+          reservadoPor: padre
+        };
+  
+        this.service.updateTraje(url, update).subscribe({
+          next: updated => {
+            console.log('Traje reservado:', updated);
+            alert(`Has reservado el traje ${id} correctamente.`);
+            this.getTrajesDisponibles();
+          },
+          error: err => {
+            console.error('Error al reservar traje:', err);
+            alert('No se pudo reservar el traje.');
+          }
+        });
       },
       error: err => {
-        console.error('Error al reservar traje:', err);
-        alert('No se pudo reservar el traje.');
+        console.error('Error al obtener datos del padre:', err);
+        alert('Error al procesar la reserva.');
       }
     });
   }

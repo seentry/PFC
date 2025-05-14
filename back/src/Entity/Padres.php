@@ -24,7 +24,7 @@ class Padres
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['padres','login'])]
+    #[Groups(['padres','login', 'trajes'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

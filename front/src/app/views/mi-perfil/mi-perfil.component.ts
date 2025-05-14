@@ -33,19 +33,20 @@ export class MiPerfilComponent implements OnInit {
     error: err => console.error('No se pudo cargar el padre:', err)
   });
 
-    this.service.getTrajes(this.urlTrajes).subscribe({
-      next: (all: Traje[]) => {
-        this.reservedTrajes = all
-          .filter(t => t.reservadoPor === this.mainId)
-          .map(t => {
-            t.fechaIncorporacion = new Date(t.fechaIncorporacion)
-              .toLocaleDateString('es-ES');
-            return t;
-          });
-        console.log('Trajes reservados:', this.reservedTrajes);
-      },
-      error: err => console.error('Error cargando trajes:', err)
-    });
+  this.service.getTrajes(this.urlTrajes).subscribe({
+    next: (all: Traje[]) => {
+      console.log('Todos los trajes:', all);
+      this.reservedTrajes = all
+        .filter(t => t.reservadoPor?.id === this.mainId)
+        .map(t => {
+          t.fechaIncorporacion = new Date(t.fechaIncorporacion)
+            .toLocaleDateString('es-ES');
+          return t;
+        });
+      console.log('Trajes reservados:', this.reservedTrajes);
+    },
+    error: err => console.error('Error cargando trajes:', err)
+  });
   }
 
   public cancelTraje(id: number): void {
