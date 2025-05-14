@@ -74,8 +74,55 @@ export class ReservasComponent {
       }
     });
   }
-  
 
+  public reservarTraje(id: number): void {
+    if (!this.userId) {
+      alert('Debes iniciar sesión para reservar');
+      return;
+    }
+  
+    this.service.getPadre(`${this.apiUrlPadres}/${this.userId}`).subscribe({
+      next: (padre: Padre) => {
+        if (padre.credito <= 0) {
+          alert('No tienes créditos suficientes para reservar.');
+          return;
+        }
+        const url = `${this.apiUrlTrajes}/${id}`;
+        const update: Partial<Traje> = {
+          disponible: false,
+          reservadoPor: this.userId
+        };
+  
+        this.service.updateTraje(url, update).subscribe({
+          next: updated => {
+            // Aquí llamas a la función para restar crédito
+            this.restarCreditoPadre(padre.credito);
+            alert(`Has reservado el traje ${id} correctamente.`);
+            this.router.navigate(['/perfil']);
+          },
+          error: err => {
+            console.error('Error al reservar traje:', err);
+            alert('No se pudo reservar el traje.');
+          }
+        });
+      },
+      error: err => {
+        console.error('Error al obtener datos del padre:', err);
+        alert('Error al procesar la reserva.');
+      }
+    });
+  }
+
+  //resta credito
+  private restarCreditoPadre(creditoActual: number): void {
+    const url = `${this.apiUrlPadres}/${this.userId}`;
+    this.service.updatePadre2(url, { credito: creditoActual - 1 }).subscribe({
+      next: () => console.log('Crédito restado'),
+      error: err => console.error('Error restando crédito', err)
+    });
+  }
+    
+ //paginación
   public actualizarPaginacion(): void {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     this.trajesPaginados = this.trajes.slice(start, start + this.itemsPerPage);
@@ -97,30 +144,5 @@ export class ReservasComponent {
 
   public totalPages(): number {
     return Math.ceil(this.trajes.length / this.itemsPerPage);
-  }
-
-  public reservarTraje(id: number): void {
-    if (!this.userId) {
-      alert('Debes iniciar sesión para reservar');
-      return;
-    }
-  
-    const url = `${this.apiUrlTrajes}/${id}`;
-    const update: Partial<Traje> = {
-      disponible: false,
-      reservadoPor: this.userId // Solo el ID
-    };
-  
-    this.service.updateTraje(url, update).subscribe({
-      next: updated => {
-        console.log('Traje reservado:', updated);
-        alert(`Has reservado el traje ${id} correctamente.`);
-        this.router.navigate(['/perfil']);
-      },
-      error: err => {
-        console.error('Error al reservar traje:', err);
-        alert('No se pudo reservar el traje.');
-      }
-    });
   }
 }

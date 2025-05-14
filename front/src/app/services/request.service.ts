@@ -36,6 +36,7 @@ export class RequestService {
   public updateTraje(url: string, traje: Partial<Traje>): Observable<Traje> {
     return this.http.patch<Traje>(url, traje);
   }
+  
 
   public deleteTraje(url: string): Observable<void> {
     return this.http.delete<void>(url);
@@ -60,6 +61,10 @@ export class RequestService {
 
   public updatePadre(url: string, padre: Padre): Observable<Padre> {
     return this.http.patch<Padre>(url, padre);
+  }
+
+  updatePadre2(url: string, data: Partial<Padre>) {
+    return this.http.patch(url, data);
   }
 
   public deletePadre(url: string): Observable<void> {

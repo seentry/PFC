@@ -57,4 +57,28 @@ class PadresController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
+
+    #[Route('/api/padres/{id}', name: 'padre_update', methods: ['PATCH'])]
+    public function update(
+        int $id,
+        Request $request,
+        EntityManagerInterface $em,
+        PadresRepository $padresRepo
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+
+        $padre = $padresRepo->find($id);
+        if (!$padre) {
+            return $this->json(['error' => 'Padre no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (array_key_exists('credito', $data)) {
+            $padre->setCredito($data['credito']);
+        }
+
+        $em->persist($padre);
+        $em->flush();
+
+        return $this->json($padre, Response::HTTP_OK, [], ['groups' => ['padres']]);
+    }
 }

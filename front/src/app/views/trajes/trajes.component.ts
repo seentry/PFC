@@ -32,15 +32,15 @@ export class TrajesComponent implements OnInit {
   public mostrarFormulario = false;
   public trajeForm!: FormGroup;
 
-  private apiBase = 'http://localhost:8001/api';
-  private urlTrajes = `${this.apiBase}/trajes`;
-  private urlPadres = `${this.apiBase}/padres`;
+  public apiBase = 'http://localhost:8001/api';
+  public urlTrajes = `${this.apiBase}/trajes`;
+  public urlPadres = `${this.apiBase}/padres`;
 
   public loginUser = localStorage.getItem('userId');
 
   constructor(
-    private service: RequestService,
-    private fb: FormBuilder
+    public service: RequestService,
+    public fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class TrajesComponent implements OnInit {
     this.getPadres();
   }
 
-  private initForm(): void {
+  public initForm(): void {
     this.trajeForm = this.fb.group({
       tipo: ['', Validators.required],
       talla: [null, [Validators.required, Validators.min(1)]],
@@ -79,6 +79,71 @@ export class TrajesComponent implements OnInit {
     });
   }
 
+  public abrirFormulario(): void {
+    const modalEl = document.getElementById('trajeModal');
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();  }
+
+  public cerrarFormulario(): void {
+    this.trajeForm.reset();
+    const modalEl = document.getElementById('trajeModal');
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal?.hide();  }
+
+    //añadir traje
+  public agregarTraje(): void {
+  if (this.trajeForm.invalid) return;
+
+  const formValues = this.trajeForm.value;
+  const hoy = new Date().toISOString().slice(0, 10);
+
+  const nuevoTraje: Traje = {
+    ...formValues,
+    disponible: true,
+    duenoOriginal: this.loginUser,
+    fechaIncorporacion: hoy
+  };
+
+  this.service.postTraje(this.urlTrajes, nuevoTraje)
+    .subscribe({
+      next: () => {
+        this.sumarCreditoPadre();
+        this.loadTrajes();
+        this.cerrarFormulario();
+      },
+      error: e => console.error('Error al agregar traje', e)
+    });
+    
+}
+//suma credito
+public sumarCreditoPadre(): void {
+  const url = `${this.urlPadres}/${this.loginUser}`;
+  this.service.getPadre(url).subscribe({
+    next: (padre: Padre) => {
+      const nuevoCredito = padre.credito + 1;
+      this.service.updatePadre2(url, { credito: nuevoCredito }).subscribe({
+        next: () => console.log('Crédito actualizado'),
+        error: err => console.error('Error actualizando crédito', err)
+      });
+    },
+    error: err => console.error('Error obteniendo padre', err)
+  });
+}
+
+//eliminar traje
+  public eliminarTraje(id: number): void {
+    this.service.deleteTraje(`${this.urlTrajes}/${id}`)
+      .subscribe({
+        next: () => {
+          this.trajes = this.trajes.filter(t => t.id !== id);
+          this.updatePagination();
+        },
+        error: e => console.error('Error al eliminar traje', e)
+      });
+  }
+
+
+ //paginación
   public updatePagination(): void {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     this.trajesPaginados = this.trajes.slice(start, start + this.itemsPerPage);
@@ -100,51 +165,5 @@ export class TrajesComponent implements OnInit {
 
   public totalPages(): number {
     return Math.ceil(this.trajes.length / this.itemsPerPage);
-  }
-
-  public abrirFormulario(): void {
-    const modalEl = document.getElementById('trajeModal');
-    const modal = new bootstrap.Modal(modalEl);
-    modal.show();  }
-
-  public cerrarFormulario(): void {
-    this.trajeForm.reset();
-    const modalEl = document.getElementById('trajeModal');
-    const modal = bootstrap.Modal.getInstance(modalEl);
-    modal?.hide();  }
-
-  public agregarTraje(): void {
-  if (this.trajeForm.invalid) return;
-
-  const formValues = this.trajeForm.value;
-
-  const hoy = new Date().toISOString().slice(0, 10);
-
-  const nuevoTraje: Traje = {
-    ...formValues,
-    disponible: true,
-    duenoOriginal: this.loginUser,
-    fechaIncorporacion: hoy
-  };
-
-  this.service.postTraje(this.urlTrajes, nuevoTraje)
-    .subscribe({
-      next: () => {
-        this.loadTrajes();
-        this.cerrarFormulario();
-      },
-      error: e => console.error('Error al agregar traje', e)
-    });
-}
-
-  public eliminarTraje(id: number): void {
-    this.service.deleteTraje(`${this.urlTrajes}/${id}`)
-      .subscribe({
-        next: () => {
-          this.trajes = this.trajes.filter(t => t.id !== id);
-          this.updatePagination();
-        },
-        error: e => console.error('Error al eliminar traje', e)
-      });
   }
 }
