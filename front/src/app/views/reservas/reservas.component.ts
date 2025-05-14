@@ -83,7 +83,7 @@ export class ReservasComponent {
   
     this.service.getPadre(`${this.apiUrlPadres}/${this.userId}`).subscribe({
       next: (padre: Padre) => {
-        if (padre.credito <= 0) {
+        if (padre.credito <= -1) {
           alert('No tienes créditos suficientes para reservar.');
           return;
         }
@@ -95,7 +95,6 @@ export class ReservasComponent {
   
         this.service.updateTraje(url, update).subscribe({
           next: updated => {
-            // Aquí llamas a la función para restar crédito
             this.restarCreditoPadre(padre.credito);
             alert(`Has reservado el traje ${id} correctamente.`);
             this.router.navigate(['/perfil']);

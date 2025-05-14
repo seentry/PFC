@@ -58,11 +58,58 @@ export class MiPerfilComponent implements OnInit {
   }
 
   public cancelTraje(id: number): void {
-    this.service.deleteTraje(this.urlTrajes + id).subscribe({
+    const update: Partial<Traje> = {
+      disponible: true,
+      reservadoPor: null
+    };
+
+    this.service.updateTraje(this.urlTrajes + id, update).subscribe({
       next: () => {
-        this.reservedTrajes = this.reservedTrajes.filter(t => t.id !== id);
+        if (this.parent) {
+          const url = `${this.urlPadres}${this.mainId}`;
+          this.service.updatePadre2(url, { credito: this.parent.credito + 1 }).subscribe({
+            next: () => {
+              this.reservedTrajes = this.reservedTrajes.filter(t => t.id !== id);
+              if (this.parent) {
+                this.parent.credito += 1;
+              }
+              alert('Reserva cancelada y crédito devuelto correctamente.');
+              // Recargar los trajes reservados después de cancelar
+              this.loadReservedTrajes();
+            },
+            error: err => {
+              console.error('Error actualizando crédito:', err);
+              alert('Error al actualizar el crédito.');
+            }
+          });
+        }
       },
-      error: err => console.error('Error eliminando traje:', err)
+      error: err => {
+        console.error('Error cancelando reserva:', err);
+        alert('Error al cancelar la reserva.');
+      }
+    });
+  }
+
+  public loadReservedTrajes(): void {
+    this.service.getTrajes(this.urlTrajes).subscribe({
+      next: (all: Traje[]) => {
+        this.reservedTrajes = all
+          .filter(t => {
+            if (typeof t.reservadoPor === 'number') {
+              return t.reservadoPor === this.mainId;
+            } else if (t.reservadoPor && typeof t.reservadoPor === 'object') {
+              return t.reservadoPor.id === this.mainId;
+            }
+            return false;
+          })
+          .map(t => {
+            t.fechaIncorporacion = new Date(t.fechaIncorporacion)
+              .toLocaleDateString('es-ES');
+            return t;
+          });
+      },
+      error: err => console.error('Error cargando trajes:', err)
     });
   }
 
