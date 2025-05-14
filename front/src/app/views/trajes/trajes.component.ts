@@ -54,8 +54,6 @@ export class TrajesComponent implements OnInit {
       tipo: ['', Validators.required],
       talla: [null, [Validators.required, Validators.min(1)]],
       estado: ['', Validators.required],
-      duenoOriginal: [null, Validators.required],
-      fechaIncorporacion: ['', Validators.required]
     });
   }
 
@@ -116,22 +114,28 @@ export class TrajesComponent implements OnInit {
     modal?.hide();  }
 
   public agregarTraje(): void {
-    if (this.trajeForm.invalid) return;
+  if (this.trajeForm.invalid) return;
 
-    const nuevo: Traje = {
-      ...this.trajeForm.value,
-      disponible: true
-    };
+  const formValues = this.trajeForm.value;
 
-    this.service.postTraje(this.urlTrajes, nuevo)
-      .subscribe({
-        next: () => {
-          this.loadTrajes();
-          this.cerrarFormulario();
-        },
-        error: e => console.error('Error al agregar traje', e)
-      });
-  }
+  const hoy = new Date().toISOString().slice(0, 10);
+
+  const nuevoTraje: Traje = {
+    ...formValues,
+    disponible: true,
+    duenoOriginal: this.loginUser,
+    fechaIncorporacion: hoy
+  };
+
+  this.service.postTraje(this.urlTrajes, nuevoTraje)
+    .subscribe({
+      next: () => {
+        this.loadTrajes();
+        this.cerrarFormulario();
+      },
+      error: e => console.error('Error al agregar traje', e)
+    });
+}
 
   public eliminarTraje(id: number): void {
     this.service.deleteTraje(`${this.urlTrajes}/${id}`)
