@@ -30,7 +30,6 @@
               <th>Tipo</th>
               <th>Talla</th>
               <th>Estado</th>
-              <th>Dueño Original</th>
               <th>Fecha</th>
               <th>Acciones</th>
             </tr>
@@ -48,9 +47,6 @@
                   <td>{{ traje.tipo }}</td>
                   <td>{{ traje.talla }}</td>
                   <td>{{ traje.estado }}</td>
-                  <td>
-                    {{ traje.duenoOriginal?.nombre }} {{ traje.duenoOriginal?.apellidos }}
-                  </td>
                   <td>{{ traje.fechaIncorporacion }}</td>
                   <td>
                     <button
