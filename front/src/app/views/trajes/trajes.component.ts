@@ -1,4 +1,3 @@
-// src/app/views/trajes/trajes.component.ts
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../services/request.service';
 import { Traje, Padre } from '../../models/response.interface';
@@ -90,7 +89,7 @@ export class TrajesComponent implements OnInit {
     const modal = bootstrap.Modal.getInstance(modalEl);
     modal?.hide();  }
 
-    //añadir traje
+  //añadir traje
   public agregarTraje(): void {
   if (this.trajeForm.invalid) return;
 
@@ -115,6 +114,7 @@ export class TrajesComponent implements OnInit {
     });
     
 }
+
 //suma credito
 public sumarCreditoPadre(): void {
   const url = `${this.urlPadres}/${this.loginUser}`;
@@ -141,7 +141,6 @@ public sumarCreditoPadre(): void {
         error: e => console.error('Error al eliminar traje', e)
       });
   }
-
 
  //paginación
   public updatePagination(): void {

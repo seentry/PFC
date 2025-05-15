@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Padres;
@@ -79,7 +80,6 @@ class TrajesController extends AbstractController
             return $this->json(['error' => 'Traje no encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        // Campos opcionales: sólo aplicamos si vienen en el request
         if (array_key_exists('tipo', $data)) {
             $traje->setTipo($data['tipo']);
         }
